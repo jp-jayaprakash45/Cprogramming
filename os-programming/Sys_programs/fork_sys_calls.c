@@ -6,16 +6,8 @@
 
 int main() {
 int pid = fork();
-  char buf[100] = "";
-  if (read(0, buf, 100) < 0) {
-    perror("read");
-    return -1;
-  }
-
-  if (write(1, buf, sizeof(buf)) < 0) {
-    perror("write");
-    return -1;
-  }
+  char buf[100] = "";   // 2 processes are independent so that we can't access data ...for this we need to use pipes
+  char another_buf[100];
    if(pid == 0){
      
          read(0, buf, 100);
@@ -25,7 +17,8 @@ int pid = fork();
          int status;
          wait(&status);
 
-         write(1, buf, sizeof(buf));
+         write(1, another_buf, sizeof(buf));
+         printf("After reading......[%s]",another_buf);
         }
   return 0;
 }
